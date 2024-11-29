@@ -47,11 +47,12 @@ Ensure that all `.tex` files are in the same directory as the `Makefile` when co
 **Example Terminal Commands:**
 
 ```bash
-# Compile both documents
+**Compile both documents**
 make
 
-# Clean auxiliary files
+**Clean auxiliary files**
 make clean
 
-# Remove all generated files including PDFs
+**Remove all generated files including PDFs**
 make mrproper
+```
