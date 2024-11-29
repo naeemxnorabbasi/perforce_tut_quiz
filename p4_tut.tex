@@ -1,0 +1,403 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{geometry}
+\usepackage{graphicx}
+\geometry{margin=1in}
+
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{bash}{
+  backgroundcolor=\color{white},
+  basicstyle=\ttfamily\small,
+  commentstyle=\color{codegray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{codepurple},
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  tabsize=2,
+}
+
+\begin{document}
+
+\title{Perforce Tutorial}
+\author{}
+\date{}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction to Perforce}
+
+Perforce Helix Core is a centralized version control system (VCS) that manages large codebases and digital assets. It is designed to handle complex development environments with speed and efficiency, making it a popular choice for large organizations and game development studios.
+
+\subsection*{Key Benefits}
+
+\begin{itemize}
+    \item \textbf{Performance:} Optimized for large files and large numbers of files.
+    \item \textbf{Security:} Granular access controls and audit trails.
+    \item \textbf{Scalability:} Handles thousands of users and terabytes of data.
+\end{itemize}
+
+\section{Installation and Setup}
+
+\subsection{Download and Install Perforce}
+
+\begin{enumerate}
+    \item \textbf{Download the Perforce Command-Line Client (P4):}
+    \begin{itemize}
+        \item Visit the \href{https://www.perforce.com/downloads}{Perforce Downloads} page.
+        \item Choose the appropriate client for your operating system.
+    \end{itemize}
+    \item \textbf{Install the Client:}
+    \begin{itemize}
+        \item Follow the installation instructions specific to your OS.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Set Up Environment Variables}
+
+\begin{itemize}
+    \item \textbf{P4PORT:} Specifies the address of the Perforce server.
+    
+    \begin{lstlisting}[style=bash]
+export P4PORT=perforce:1666
+    \end{lstlisting}
+    
+    \item \textbf{P4USER:} Your Perforce username.
+    
+    \begin{lstlisting}[style=bash]
+export P4USER=your_username
+    \end{lstlisting}
+    
+    \item \textbf{P4CLIENT:} Your workspace/client name.
+    
+    \begin{lstlisting}[style=bash]
+export P4CLIENT=your_workspace
+    \end{lstlisting}
+\end{itemize}
+
+\subsection{Authenticate with the Server}
+
+\begin{lstlisting}[style=bash]
+p4 login
+\end{lstlisting}
+
+\section{Perforce Concepts in Depth}
+
+\subsection{Depot}
+
+The \textbf{depot} is the central repository on the Perforce server where all versioned files are stored. It can contain multiple projects and branches.
+
+\subsection{Workspace (Client)}
+
+A \textbf{workspace} (also known as a client) is a local copy of files from the depot. It maps files in the depot to your local file system.
+
+\subsubsection*{Creating a Workspace}
+
+\begin{lstlisting}[style=bash]
+p4 client
+\end{lstlisting}
+
+This command opens a text editor where you can define the workspace view and other settings.
+
+\subsection{Changelists}
+
+A \textbf{changelist} is a collection of file revisions that are submitted to the depot as a single unit. Each changelist has a unique number and a description.
+
+\subsubsection*{Types of Changelists}
+
+\begin{itemize}
+    \item \textbf{Default Changelist:} The changelist where files are opened by default.
+    \item \textbf{Numbered Changelist:} A user-created changelist with a specific number.
+\end{itemize}
+
+\subsection{Revision}
+
+A \textbf{revision} is a specific version of a file in the depot. Revisions are numbered sequentially (e.g., \texttt{filename\#1}, \texttt{filename\#2}).
+
+\subsection{Integration}
+
+Integration in Perforce refers to the process of propagating changes between different branches. It encompasses both branching and merging.
+
+\section{Basic Workflow with Examples}
+
+Let's walk through a typical Perforce workflow with practical examples.
+
+\subsection{Setting Up Your Workspace}
+
+\textbf{Example:} Creating a new workspace named \texttt{alice\_workspace}.
+
+\begin{lstlisting}[style=bash]
+p4 client alice_workspace
+\end{lstlisting}
+
+In the editor that opens:
+
+\begin{itemize}
+    \item \textbf{Client:} \texttt{alice\_workspace}
+    \item \textbf{Root:} \texttt{/Users/alice/projects/perforce}
+    \item \textbf{View:}
+
+\begin{verbatim}
+//depot/... //alice_workspace/...
+\end{verbatim}
+\end{itemize}
+
+Save and close the editor.
+
+\subsection{Syncing Files from the Depot}
+
+\textbf{Example:} Sync all files in the workspace to the latest revision.
+
+\begin{lstlisting}[style=bash]
+p4 sync
+\end{lstlisting}
+
+\textbf{Output:}
+
+\begin{verbatim}
+//depot/project/file1.txt#3 - added as /Users/alice/projects/perforce/project/file1.txt
+//depot/project/file2.txt#5 - updated /Users/alice/projects/perforce/project/file2.txt
+\end{verbatim}
+
+\subsection{Editing Files}
+
+Before editing a file, you need to open it for edit.
+
+\textbf{Example:} Editing \texttt{file1.txt}.
+
+\begin{lstlisting}[style=bash]
+p4 edit project/file1.txt
+\end{lstlisting}
+
+\textbf{Output:}
+
+\begin{verbatim}
+//depot/project/file1.txt#3 - opened for edit
+\end{verbatim}
+
+Make your changes to \texttt{project/file1.txt} using your preferred text editor.
+
+\subsection{Adding New Files}
+
+\textbf{Example:} Adding a new file \texttt{file3.txt}.
+
+\begin{enumerate}
+    \item Create the file locally.
+
+\begin{lstlisting}[style=bash]
+echo "New content" > project/file3.txt
+\end{lstlisting}
+
+    \item Add the file to Perforce.
+
+\begin{lstlisting}[style=bash]
+p4 add project/file3.txt
+\end{lstlisting}
+
+    \textbf{Output:}
+
+\begin{verbatim}
+//depot/project/file3.txt#1 - opened for add
+\end{verbatim}
+\end{enumerate}
+
+\subsection{Deleting Files}
+
+\textbf{Example:} Deleting \texttt{file2.txt}.
+
+\begin{lstlisting}[style=bash]
+p4 delete project/file2.txt
+\end{lstlisting}
+
+\textbf{Output:}
+
+\begin{verbatim}
+//depot/project/file2.txt#5 - opened for delete
+\end{verbatim}
+
+\subsection{Reverting Changes}
+
+\textbf{Example:} Reverting changes to \texttt{file1.txt}.
+
+\begin{lstlisting}[style=bash]
+p4 revert project/file1.txt
+\end{lstlisting}
+
+\textbf{Output:}
+
+\begin{verbatim}
+//depot/project/file1.txt#3 - was edit, reverted
+\end{verbatim}
+
+\subsection{Resolving Conflicts}
+
+Conflicts occur when multiple users edit the same file concurrently.
+
+\textbf{Example:} Resolving a conflict in \texttt{file1.txt}.
+
+\begin{enumerate}
+    \item Sync the latest changes.
+
+\begin{lstlisting}[style=bash]
+p4 sync
+\end{lstlisting}
+
+    \textbf{Output:}
+
+\begin{verbatim}
+//depot/project/file1.txt#4 - merging //depot/project/file1.txt
+\end{verbatim}
+
+    \item Resolve the conflict.
+
+\begin{lstlisting}[style=bash]
+p4 resolve
+\end{lstlisting}
+
+    \textbf{Options:}
+    \begin{itemize}
+        \item \texttt{e}: Launches an editor for manual merging.
+        \item \texttt{accept yours/ theirs/ merge/ edit}
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Submitting Changes}
+
+\textbf{Example:} Submitting changes in the default changelist.
+
+\begin{lstlisting}[style=bash]
+p4 submit
+\end{lstlisting}
+
+An editor opens to enter a changelist description.
+
+\begin{itemize}
+    \item \textbf{Change:} \texttt{new}
+    \item \textbf{Description:} \texttt{Fixed bug in file1.txt and added file3.txt}
+\end{itemize}
+
+Save and close the editor.
+
+\textbf{Output:}
+
+\begin{verbatim}
+Change 102 submitted.
+\end{verbatim}
+
+\section{Branching and Merging}
+
+Branching allows you to diverge from the main line of development to work on features or fixes independently.
+
+\subsection{Creating a Branch}
+
+\textbf{Example:} Branching \texttt{//depot/project/...} to \texttt{//depot/branches/feature1/...}.
+
+\begin{enumerate}
+    \item Use the \texttt{integrate} command.
+
+\begin{lstlisting}[style=bash]
+p4 integrate //depot/project/... //depot/branches/feature1/...
+\end{lstlisting}
+
+    \textbf{Output:}
+
+\begin{verbatim}
+//depot/branches/feature1/file1.txt#1 - branch from //depot/project/file1.txt#3
+\end{verbatim}
+
+    \item Submit the branch.
+
+\begin{lstlisting}[style=bash]
+p4 submit -d "Created feature1 branch"
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{Making Changes in the Branch}
+
+Edit files in the branch as usual.
+
+\begin{lstlisting}[style=bash]
+p4 edit //depot/branches/feature1/file1.txt
+\end{lstlisting}
+
+\subsection{Merging Changes Back to Main}
+
+\textbf{Example:} Integrate changes from \texttt{feature1} back to \texttt{project}.
+
+\begin{enumerate}
+    \item Integrate changes.
+
+\begin{lstlisting}[style=bash]
+p4 integrate //depot/branches/feature1/... //depot/project/...
+\end{lstlisting}
+
+    \item Resolve conflicts if any.
+
+\begin{lstlisting}[style=bash]
+p4 resolve
+\end{lstlisting}
+
+    \item Submit the merged changes.
+
+\begin{lstlisting}[style=bash]
+p4 submit -d "Merged feature1 into main project"
+\end{lstlisting}
+\end{enumerate}
+
+\section{Advanced Features}
+
+\subsection{Shelving}
+
+Shelving allows you to store your changes on the server without committing them to the depot.
+
+\textbf{Example:} Shelving changes in a changelist.
+
+\begin{lstlisting}[style=bash]
+p4 shelve -c 103
+\end{lstlisting}
+
+\subsection{Labeling}
+
+Labels are used to tag a group of file revisions for later reference.
+
+\textbf{Example:} Creating a label for a release.
+
+\begin{enumerate}
+    \item Create the label specification.
+
+\begin{lstlisting}[style=bash]
+p4 label RELEASE_1.0
+\end{lstlisting}
+
+    \item In the editor, define the label view and description.
+    \item Tag files with the label.
+
+\begin{lstlisting}[style=bash]
+p4 labelsync -l RELEASE_1.0 //depot/project/...
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{Permissions and Protections}
+
+Manage user access with the \texttt{p4 protect} command (requires admin privileges).
+
+\section{Conclusion}
+
+By now, you should have a solid understanding of Perforce's basic and advanced features. Remember to practice these commands in a test environment to become more comfortable with Perforce operations.
+
+\subsection*{Further Resources}
+
+\begin{itemize}
+    \item \textbf{Perforce Official Documentation:} \href{https://www.perforce.com/manuals}{https://www.perforce.com/manuals}
+    \item \textbf{Perforce Visual Client (P4V):} A GUI tool for interacting with Perforce.
+\end{itemize}
+
+\end{document}
+

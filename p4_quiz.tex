@@ -1,0 +1,149 @@
+\documentclass{article}
+\usepackage{geometry}
+\geometry{margin=1in}
+\begin{document}
+
+\title{Perforce Tutorial Quizzes and Answers}
+\author{}
+\date{}
+
+\maketitle
+
+\section*{Quiz 1: Basic Commands}
+
+\subsection*{Question 1}
+
+Which command do you use to retrieve the latest files from the depot to your workspace?
+
+\begin{enumerate}
+    \item \texttt{p4 update}
+    \item \texttt{p4 fetch}
+    \item \texttt{p4 sync}
+    \item \texttt{p4 get}
+\end{enumerate}
+
+\subsubsection*{Answer}
+
+\textbf{Answer:} \texttt{p4 sync} (\textbf{Option C})
+
+\hrulefill
+
+\subsection*{Question 2}
+
+How do you open a file for editing?
+
+\begin{enumerate}
+    \item \texttt{p4 open}
+    \item \texttt{p4 edit}
+    \item \texttt{p4 modify}
+    \item \texttt{p4 change}
+\end{enumerate}
+
+\subsubsection*{Answer}
+
+\textbf{Answer:} \texttt{p4 edit} (\textbf{Option B})
+
+\hrulefill
+
+\section*{Quiz 2: Concepts}
+
+\subsection*{Question 3}
+
+What is a changelist in Perforce?
+
+\begin{enumerate}
+    \item A list of clients connected to the server.
+    \item A collection of file revisions submitted as a single unit.
+    \item A history log of all changes.
+    \item A backup of the depot.
+\end{enumerate}
+
+\subsubsection*{Answer}
+
+\textbf{Answer:} A collection of file revisions submitted as a single unit. (\textbf{Option B})
+
+\hrulefill
+
+\subsection*{Question 4}
+
+True or False: The \texttt{p4 integrate} command is used only for merging changes, not for creating branches.
+
+\subsubsection*{Answer}
+
+\textbf{Answer:} False. The \texttt{p4 integrate} command is used for both branching and merging.
+
+\hrulefill
+
+\section*{Quiz 3: Advanced Usage}
+
+\subsection*{Question 5}
+
+Which command would you use to revert all unchanged files in a pending changelist?
+
+\begin{enumerate}
+    \item \texttt{p4 revert -a}
+    \item \texttt{p4 clean}
+    \item \texttt{p4 undo}
+    \item \texttt{p4 discard}
+\end{enumerate}
+
+\subsubsection*{Answer}
+
+\textbf{Answer:} \texttt{p4 revert -a} (\textbf{Option A})
+
+\hrulefill
+
+\subsection*{Question 6}
+
+What is the purpose of shelving in Perforce?
+
+\begin{enumerate}
+    \item To permanently delete files from the depot.
+    \item To submit changes to the depot.
+    \item To temporarily store changes on the server without submitting.
+    \item To clone a repository.
+\end{enumerate}
+
+\subsubsection*{Answer}
+
+\textbf{Answer:} To temporarily store changes on the server without submitting. (\textbf{Option C})
+
+\hrulefill
+
+\section*{Quiz 4: Practical Scenario}
+
+\subsection*{Question 7}
+
+Alice and Bob are both working on \texttt{file1.txt}. Alice submits her changes before Bob. When Bob tries to submit, he gets an error about conflicting revisions. What should Bob do?
+
+\begin{enumerate}
+    \item Force submit his changes.
+    \item Revert his changes.
+    \item Use \texttt{p4 sync} followed by \texttt{p4 resolve}.
+    \item Delete the file.
+\end{enumerate}
+
+\subsubsection*{Answer}
+
+\textbf{Answer:} Use \texttt{p4 sync} followed by \texttt{p4 resolve}. (\textbf{Option C})
+
+\hrulefill
+
+\subsection*{Question 8}
+
+How can you view the revision history of a file?
+
+\begin{enumerate}
+    \item \texttt{p4 history filename}
+    \item \texttt{p4 log filename}
+    \item \texttt{p4 filelog filename}
+    \item \texttt{p4 revisions filename}
+\end{enumerate}
+
+\subsubsection*{Answer}
+
+\textbf{Answer:} \texttt{p4 filelog filename} (\textbf{Option C})
+
+\hrulefill
+
+\end{document}
